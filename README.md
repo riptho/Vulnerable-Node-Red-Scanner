@@ -1,6 +1,6 @@
 # Vulnerable-Node-Red-Scanner
 
-Crude script for automating the scanning and exploitation of unprotected node-red servers. 
+Python based script for automating the scanning and exploitation of unprotected node-red servers. 
 
 1) Install zoomeye from the package manager.
 
