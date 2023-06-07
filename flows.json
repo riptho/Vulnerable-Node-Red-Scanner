@@ -1,0 +1,71 @@
+[
+    {
+        "id": "AF6OAU2hD1",
+        "type": "inject",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 4490,
+        "y": 4920,
+        "wires": [
+            [
+                "80db3c69d9cdf34d"
+            ]
+        ]
+    },
+    {
+        "id": "116d6edba227011c",
+        "type": "debug",
+        "z": "f6f2187d.f17ca8",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 4840,
+        "y": 4920,
+        "wires": []
+    },
+    {
+        "id": "80db3c69d9cdf34d",
+        "type": "exec",
+        "z": "f6f2187d.f17ca8",
+        "command": "COMMAND HERE",
+        "addpay": "",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": false,
+        "oldrc": false,
+        "name": "",
+        "x": 4670,
+        "y": 4920,
+        "wires": [
+            [
+                "116d6edba227011c"
+            ],
+            [
+                "116d6edba227011c"
+            ],
+            []
+        ]
+    }
+]
